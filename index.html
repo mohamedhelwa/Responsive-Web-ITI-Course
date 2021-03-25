@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./CSS/style.css">
+    <script src="./jquery-3.5.1.min.js"></script>
+    <title>Day 1</title>
+    <style>
+       #userDataDiv{
+        margin-left: 5%;
+        margin-bottom: 3%;
+        margin-top: 3%;
+        font-size: 25px;
+       }
+       #inputID{
+           font-size: 20px;
+       }
+       #displayBtn{
+           font-size: 20px;
+           margin-left: 2%;
+       }
+       #displayAllBtn{
+        font-size: 20px;
+        margin-left: 2%;
+       }
+
+       .style1{
+           border: 2px solid black;
+           height: 100px;
+           margin-left: 40%;
+           background-color: blue;
+           width: 100px;
+       }
+
+       .style2{
+           border: 2px solid black;
+           height: 100px;
+           margin-left: 40%;
+
+           background-color: red;
+           width: 200px;
+       }
+    </style>
+  </head>
+  
+  <body>
+      <!-- Question 1 A -->
+      <div class="container">
+          <h1>Question 1.A: </h1>
+          <p class="tip">*Change div CSS using JQuery:</p>
+          <div id="styleDiv">
+              <h2 id="divH2">Click the button below to change the div style using JQuery.</h2>
+          </div>
+          <button id="cssBtn" class="cssBtn">Change Style</button>
+          <button id="cssBtn2" class="cssBtn2">Reset Style</button>
+      </div>
+    
+      <hr>
+  
+      <!-- Question 1 B -->
+      <div class="container"">
+        <h1>Question 1.B: </h1>
+        <p class="tip">*Click the button to fade images in/out:</p>
+        <div class="gallery">
+            <button id="fadeBtn">Fade in/out</button>
+            <img src="./images/1.jpg" class="pic">
+            <img src="./images/2.jpg" class="pic">
+            <img src="./images/3.jpg" class="pic">
+            <img src="./images/4.jpg" class="pic">
+        </div>
+        <div id="confirmDiv" style="text-align: center; color: green;">
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Question 3 A & B -->
+    <div class="container">
+        <h1>Question 3: </h1>
+        <p class="tip">*Retrieve and display user data using JQuery & AJAX:</p>
+        <div id="userDataDiv">
+            <label for="inputID">Enter UserID between (1-12) to get its data: </label>
+            <input type="number" max="12" id="inputID">
+
+            <button id="displayBtn" onclick="getUserData()">Display</button>
+            <button id="displayAllBtn" onclick="displayAll()">Display All</button>
+
+            <div id="resultDiv">
+                
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Question 4 (Bonus)-->
+    <div class="container">
+        <h1>Question 4 (Bonus): </h1>
+        <p class="tip">*Move the mouse over the div to change its class using JQuery:</p>
+
+        <div id="styleDiv2" class="style1">
+        </div>
+
+    </div>
+
+    <hr>
+    
+        <script>
+            $(document).ready(function(){
+
+                /* Question 1.A - Changing Div Style */
+                $("#cssBtn").click(function(){
+                    $("#styleDiv").css({"background-color": "blue", "border": "3px solid red"});
+                    $("#divH2").css("color", "yellow");
+                });
+                $("#cssBtn2").click(function(){
+                        $("#styleDiv").css({"background-color": "white", "border": "3px solid black"});
+                        $("#divH2").css("color", "black");
+                });
+                
+
+                /* Question 1.B - Fading */
+                $("#fadeBtn").click(function(){
+                    $(".pic").fadeToggle(2000, function(){
+                        $("#confirmDiv").html("<h2>Action Completed!</h2>");
+                        $("#confirmDiv").show();
+                    });
+                });
+                
+                /* Question 4 - Div Toggle Class (Bonus) */                
+                $("#styleDiv2").hover(function(){
+                    $("#styleDiv2").toggleClass("style2");  //Toggle the active class to the area is hovered
+                });
+            });
+
+
+
+            /* Question 3.A - Get and Display User Data by UserID */
+            function getUserData(){
+                if($("#inputID").val() != null &&  $("#inputID").val() <= 12 &&  $("#inputID").val() != ""){
+                    var URL = "https://reqres.in/api/users/" + $("#inputID").val();
+                    $.get(URL, function(userData){
+                        $("#resultDiv").html(
+                            "<div style='width: 400px; height: 300px; border: 3px solid green; margin-left: 33%; margin-top: 5%; display: inline-block;'"+">"
+                            +
+                            "<br>"
+                            +
+                            "<img"
+                            +
+                            " src='" 
+                            +
+                            userData.data.avatar 
+                            + 
+                            "' alt='User Avatar' style='width: 100px; height: 100px; border-radius: 50px; margin-left: 37%;'"+">"
+                            +
+                            "<br><br>"
+                            +
+                            "<span style='margin-left: 10%;'>First Name: </span>"
+                            +
+                            "<span style='color: blue;'> "
+                            +
+                            userData.data.first_name
+                            +
+                            "</span>"
+                            +
+                            "<br>"
+                            +
+                            "<span style='margin-left: 10%;'>Last Name:</span>"
+                            +            
+                            "<span style='color: blue;'> "
+                            +
+                            userData.data.last_name
+                            +
+                            "</span>"
+                            +
+                            "<br>"
+                            +
+                            "<span style='margin-left: 10%;'>Email: </span>"
+                            +
+                            "<span style='color: blue;'> "
+                            +
+                            userData.data.email
+                            +
+                            "</span>"
+                            +
+                            "</div>"
+                        );
+                    });
+                }
+                else {
+                    $("#resultDiv").html("<h2 style='margin-left: 20%; margin-top: 10%; color: red'>Please Enter a Valid UserID between (1-12)</h2>");
+                    $("#resultDiv").show();
+                }
+                    
+            }
+
+            /* Question 3.B - Get and Display All Users' Data */
+            function displayAll(){
+                $("#resultDiv").html("");
+                for(i = 1; i <= 12; i++){
+                    var URL = "https://reqres.in/api/users/" + i;
+                    $.get(URL, function(userData){
+                            $("#resultDiv").append(
+                                "<div style='width: 380px; height: 300px; border: 3px solid green; margin: 1%; display: inline-block;'"+">"
+                                +
+                                "<br>"
+                                +
+                                "<img"
+                                +
+                                " src='" 
+                                +
+                                userData.data.avatar 
+                                + 
+                                "' alt='User Avatar' style='width: 100px; height: 100px; border-radius: 50px; margin-left: 37%;'"+">"
+                                +
+                                "<br><br>"
+                                +
+                                "<span style='margin-left: 5%;'>First Name: </span>"
+                                +
+                                "<span style='color: blue;'> "
+                                +
+                                userData.data.first_name
+                                +
+                                "</span>"
+                                +
+                                "<br>"
+                                +
+                                "<span style='margin-left: 5%;'>Last Name:</span>"
+                                +            
+                                "<span style='color: blue;'> "
+                                +
+                                userData.data.last_name
+                                +
+                                "</span>"
+                                +
+                                "<br>"
+                                +
+                                "<span style='margin-left: 5%;'>Email: </span>"
+                                +
+                                "<span style='color: blue;'> "
+                                +
+                                userData.data.email
+                                +
+                                "</span>"
+                                +
+                                "</div>"
+                            );                        
+                    });
+                }
+            }
+        
+        </script>
+  </body>
+</html>
